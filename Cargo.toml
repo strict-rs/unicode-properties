@@ -1,12 +1,12 @@
 [package]
 name = "unicode-properties"
-version = "0.1.4"
-authors = ["Charles Lew <crlf0710@gmail.com>", "Manish Goregaokar <manishsmail@gmail.com>"]
-edition = "2021"
+version = { workspace = true }
+authors = { workspace = true }
+edition = { workspace = true }
 homepage = "https://github.com/unicode-rs/unicode-properties"
-repository = "https://github.com/strict-rs/unicode-properties"
+repository = { workspace = true }
 documentation = "https://docs.rs/unicode-properties"
-license = "(MIT OR Apache-2.0) AND Unicode-3.0"
+license = { workspace = true }
 keywords = ["text", "unicode"]
 categories = ["no-std::no-alloc"]
 readme = "README.md"
@@ -15,6 +15,7 @@ Query character Unicode properties according to
 UAX #44 and UTR #51.
 """
 exclude = [ "target/*", "Cargo.lock", "scripts/*" ]
+rust-version = { workspace = true }
 
 [features]
 general-category = []
@@ -23,7 +24,8 @@ default = ["general-category", "emoji"]
 
 [dependencies]
 [workspace]
-members = ["stask"]
+members = ["./","stask"]
+resolver = "3"
 
 [workspace.dependencies]
 # Panic-free test vocabulary, consumed as an external git crate, tracking the
@@ -37,12 +39,13 @@ template-stask = { version = "0.3.2", git = "https://github.com/earthlings-dev/t
 
 [workspace.package]
 authors = ["Charles Lew <crlf0710@gmail.com>", "Manish Goregaokar <manishsmail@gmail.com>"]
-edition = "2021"
+edition = "2024"
 license = "(MIT OR Apache-2.0) AND Unicode-3.0"
 publish = false
 readme = "README.md"
 repository = "https://github.com/strict-rs/unicode-properties"
 version = "0.1.4"
+rust-version = "1.99.0"
 
 [patch."https://github.com/strict-rs/unicode-properties"]
 unicode-properties = { path = "." }
