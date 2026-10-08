@@ -1,0 +1,26 @@
+[package]
+name         = "stask"
+version      .workspace = true
+edition      .workspace = true
+authors      .workspace = true
+repository   .workspace = true
+publish      .workspace = true
+readme       .workspace = true
+description  = "Repository-specific `x` extension runner for the installed `template` workflow."
+default-run  = "stask"
+license.workspace = true
+
+[lib]
+name = "stask"
+path = "src/lib.rs"
+
+[[bin]]
+name = "stask"
+path = "src/main.rs"
+
+[dependencies]
+template-core.workspace  = true
+template-stask.workspace = true
+
+[dev-dependencies]
+strict-test-support.workspace = true

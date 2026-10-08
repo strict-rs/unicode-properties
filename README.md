@@ -1,3 +1,5 @@
+<!-- Do not edit; generated file. -->
+
 # unicode-properties
 
 [![Build Status](https://github.com/unicode-rs/unicode-properties/workflows/Tests/badge.svg)](https://github.com/unicode-rs/unicode-properties/actions)

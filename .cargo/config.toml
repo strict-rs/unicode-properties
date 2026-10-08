@@ -1,0 +1,2 @@
+[alias]
+stask = ["run", "--package", "stask", "--quiet", "--"]
