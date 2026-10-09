@@ -23,6 +23,10 @@ emoji = []
 default = ["general-category", "emoji"]
 
 [dependencies]
+
+[dev-dependencies]
+strict-test-support.workspace = true
+
 [workspace]
 members = ["./","stask"]
 resolver = "3"

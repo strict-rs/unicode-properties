@@ -17,7 +17,12 @@
 //!
 //! Future properties can be added as requested.
 //!
+//! All supported properties use Unicode 18.0.0. Tables are generated from the
+//! complete official release inputs retained with this repository.
+//!
 //! ```rust
+//! # #[cfg(all(feature = "emoji", feature = "general-category"))]
+//! # {
 //! use unicode_properties::UnicodeEmoji;
 //! use unicode_properties::UnicodeGeneralCategory;
 //!
@@ -27,6 +32,7 @@
 //! println!("{}({:?})", ch, group);
 //! println!("The above char {} for use as emoji char.",
 //!          if is_emoji { "is recommended" } else { "is not recommended" });
+//! # }
 //! ```
 //!
 //! # Features

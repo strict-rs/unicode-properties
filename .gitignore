@@ -18,3 +18,5 @@ Cargo.lock
 Thumbs.db
 .envrc
 .direnv/
+__pycache__/
+/scripts/tables.rs

@@ -2,74 +2,85 @@ name: Rust
 
 on:
   push:
-    branches: [ master ]
+    branches: [upgrade]
   pull_request:
-    branches: [ master ]
+    branches: [upgrade]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 env:
   CARGO_INCREMENTAL: 0
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: 1
-  RUSTFLAGS: -D warnings
-  RUSTDOCFLAGS: -D warnings --cfg docsrs
 
 jobs:
   build:
+    name: Rust 1.99.0 (${{ matrix.profile }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        rust:
-          - stable
-          - beta
-          - nightly
+        include:
+          - profile: default
+            features: --features default
+          - profile: all
+            features: --all-features
+          - profile: none
+            features: --no-default-features
+          - profile: general-category
+            features: --no-default-features --features general-category
+          - profile: emoji
+            features: --no-default-features --features emoji
     steps:
-    - uses: actions/checkout@v2
-    - name: Install toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-          toolchain: ${{ matrix.rust }}
-          override: true
-          components: rustfmt, clippy
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests with all features
-      run: cargo test --all-features --verbose
-    - name: Run tests without features
-      run: cargo test --lib --no-default-features --verbose
-    - name: Package
-      run: cargo package
-    - name: Test package
-      run: cd $(find target/package/ -maxdepth 1 -mindepth 1 -type d) && cargo test
-    - name: Test package without features
-      run: cd $(find target/package/ -maxdepth 1 -mindepth 1 -type d) && cargo test --lib --no-default-features
-    - name: Build docs
-      if: matrix.rust == 'nightly'
-      run: cargo doc --all-features --verbose
-    - name: Check formatting
-      if: matrix.rust == 'stable'
-      run: cargo fmt --all --check
-    - name: Check clippy
-      if: matrix.rust == 'stable'
-      run: cargo clippy --all-features --lib --tests --examples --verbose
-    - name: Check benchmarks with clippy
-      if: matrix.rust == 'nightly'
-      run: cargo clippy --all-features --benches --verbose
-  msrv:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@1.99.0
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: just,cargo-nextest
+      - name: Install the standard workflow
+        run: cargo install --git https://github.com/earthlings-dev/template-rs.git --branch main --bin template template-cli
+      - name: Resolve the workspace graph
+        run: just update
+      - name: Check all workspace targets
+        env:
+          RUSTFLAGS: -D warnings
+        run: just check -- ${{ matrix.features }}
+      - name: Run integration tests and doctests
+        env:
+          RUSTFLAGS: -D warnings
+          RUSTDOCFLAGS: -D warnings
+        run: just test-all -- ${{ matrix.features }}
+
+  format:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Install msrv toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-          toolchain: 1.56
-          override: true
-    - name: Build
-      run: cargo build --verbose --all-features
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@1.99.0
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: rustfmt
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: just
+      - name: Install the standard workflow
+        run: cargo install --git https://github.com/earthlings-dev/template-rs.git --branch main --bin template template-cli
+      - name: Format the workspace
+        run: just fmt
+      - name: Compare formatted files
+        run: git diff --exit-code
+
   regen:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Regen
-      run: cd scripts && python3 unicode.py
-    - name: Diff tables
-      run: diff src/tables.rs scripts/tables.rs
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+      - name: Test input validation and output preservation
+        run: python3 -m unittest discover -s scripts -p 'test_unicode.py' -v
+      - name: Regenerate from retained official inputs
+        run: python3 scripts/unicode.py --output scripts/tables.rs
+      - name: Compare the complete generated tables
+        run: diff -u src/tables.rs scripts/tables.rs

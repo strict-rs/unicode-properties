@@ -1,0 +1,21 @@
+{
+  "unicode_version": "18.0.0",
+  "files": {
+    "UnicodeData.txt": {
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/UnicodeData.txt",
+      "sha256": "0736451de439ae7baf1425136617da495e09ee5afbe6e394374db7009ea08950"
+    },
+    "emoji/emoji-data.txt": {
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/emoji/emoji-data.txt",
+      "sha256": "80d00f8e616a0ef27fd6b8de3b758c06383b5d917e2977709578e68baf733bf1"
+    },
+    "extracted/DerivedGeneralCategory.txt": {
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/extracted/DerivedGeneralCategory.txt",
+      "sha256": "d6b151d2d40ee9b1876d26f417980f45ffae47b6055ccf7203cb31f07a030f94"
+    },
+    "ReadMe.txt": {
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/ReadMe.txt",
+      "sha256": "b0ea442f29dee90584aacd3665a6e1ce87ffc917a4d31f34e1916d2d6f7f9205"
+    }
+  }
+}

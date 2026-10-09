@@ -12,5 +12,5 @@ use template_core::cli::parse::ParseReport;
 /// Returns a typed registration error if the controlled `x` router metadata
 /// is invalid.
 pub fn commands() -> template_stask::Result<CommandSet<ControlFlow<ParseReport>>> {
-  template_stask::empty_registry("rust-template extensions")
+    template_stask::empty_registry("rust-template extensions")
 }
